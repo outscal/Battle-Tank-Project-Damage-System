@@ -2,16 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using BulletServices;
-using Commons;
+using VFXServices;
 
 namespace TankServices
 {
-    public class TankView : MonoBehaviour, IDamagable
+    public class TankView : MonoBehaviour
     {
         //references
         private TankController tankController;
-
-        public GameObject TankDestroyVFX;
 
 
         //floats
@@ -62,7 +60,13 @@ namespace TankServices
                 childs[i].material = material;
             }
         }
-
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.GetComponent<BulletView>() != null)
+            {
+                tankController.OnCollisionWithBullet(other.gameObject.GetComponent<BulletView>());
+            }
+        }
         public void DestroyView()
         {
             for (int i = 0; i < childs.Length; i++)
@@ -70,13 +74,8 @@ namespace TankServices
 
             tankController = null;
             BulletShootPoint = null;
-            TankDestroyVFX = null;
+            VFXService.instance.TankExplosionEffects(transform.position);
             Destroy(this.gameObject);
-        }
-
-        public void TakeDamage(float damage)
-        {
-            tankController.ApplyDamage(damage);
         }
     }
 }

@@ -1,88 +1,72 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.AI;
 using TankServices;
-using Commons;
+using BulletServices;
+using VFXServices;
 namespace EnemyServices
 {
-    public class EnemyView : MonoBehaviour, IDamagable
+    public class EnemyView : MonoBehaviour
     {
-        [Header("VFX")]
-        public GameObject TankDestroyVFX;
-
-        [Header("Shooting")]
         public Transform shootingPoint;
-
-        [Header("States")]
-        public EnemyPatrollingState patrollingState;
-        public EnemyChasingState chasingState;
-        public EnemyAttackingState attackingState;
-        public EnemyState initialState;
-        public EnemyState activeState;
-        public EnemyStates currentState;
-
-        public EnemyController controller { get; private set; }
+        private EnemyController controller;
         public NavMeshAgent navMeshAgent { get; private set; }
-        private TankView tankView;
+
+        public bool playerDetected; //{ get; private set; }
+
 
         private void Awake()
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
         }
-        private void Start()
-        {
-            InitializeState();
-        }
-
         public void SetEnemyController(EnemyController _controller)
         {
             controller = _controller;
         }
-        public void SetTankView(TankView tank)
+
+        private void Update()
         {
-            tankView = tank;
-        }
-        public Transform GetTankTransform()
-        {
-            return tankView.transform;
+            Debug.Log(controller.currentState);
+            controller.Movement();
+            if (playerDetected)
+                controller.Attack();
         }
 
-        private void InitializeState()
+        private void OnTriggerEnter(Collider other)
         {
-            switch (initialState)
+            if (other.GetComponent<TankView>() != null)
+                playerDetected = true;
+        }
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.GetComponent<BulletView>() != null)
             {
-                case EnemyState.Attacking:
-                    currentState = attackingState;
-                    break;
-                case EnemyState.Chasing:
-                    currentState = chasingState;
-                    break;
-                case EnemyState.Patrolling:
-                    currentState = patrollingState;
-                    break;
-                default:
-                    currentState = null;
-                    break;
+                controller.OnCollisionWithBullet(other.gameObject.GetComponent<BulletView>());
             }
-            currentState.OnStateEnter();
         }
 
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.GetComponent<TankView>() != null)
+            {
+                playerDetected = false;
+            }
+        }
+        public Transform GetTank()
+        {
+            return TankService.instance.tankScriptable.tankView.transform;
+        }
         public void DestroyView()
         {
+            // doubt ?? if we miss something to set to null?? then what are the consecuences ?? how to deal with it?? any solution? 
             shootingPoint = null;
             controller = null;
             navMeshAgent = null;
-            TankDestroyVFX = null;
-            currentState = null;
-            patrollingState = null;
-            chasingState = null;
-            attackingState = null;
+            VFXService.instance.TankExplosionEffects(transform.position);
+
+
             Destroy(this.gameObject);
         }
-
-        public void TakeDamage(float damage)
-        {
-            controller.ApplyDamage(damage);
-        }
-
     }
 }

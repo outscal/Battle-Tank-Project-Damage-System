@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyType: 1
   enemyView: {fileID: 5179792892772031961, guid: 3d5f92d0687a67445813e5d5e2ec0b0c,
     type: 3}
-  health: 50
+  health: 20
   movementSpeed: 20
   rotationSpeed: 50
   patrollingRadius: 30
-  patrolTime: 5
+  patrolTime: 3
   fireRate: 1
   attackDistace: 7.5
   bulletType: {fileID: 11400000, guid: b0f2c2ddca7b55444845206d3060c682, type: 2}

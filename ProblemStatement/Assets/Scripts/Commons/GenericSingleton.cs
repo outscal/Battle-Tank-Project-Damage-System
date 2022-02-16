@@ -1,9 +1,10 @@
-﻿
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Commons
 {
-    public class GenericSingleton<T> where T : GenericSingleton<T>
+    public class GenericSingleton<T> : MonoBehaviour where T : GenericSingleton<T>
     {
         private static T Instance;
         public static T instance { get { return Instance; } }
@@ -17,9 +18,8 @@ namespace Commons
             else
             {
                 Debug.LogError(Instance + "is Tring to create another instance");
-                Instance = null;
+                Destroy(this);
             }
         }
-
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using VFXServices;
+using TankServices;
 
 namespace BulletServices
 {
@@ -30,11 +30,8 @@ namespace BulletServices
 
         public void DestroyController()
         {
-            if (bulletView)
-                VFXService.instance.InstantiateEffects(bulletView.BullectDestroyVFX, bulletView.transform.position);
             bulletView.DestroyView();
             bulletModel.DestroyModel();
-
             bulletView = null;
             bulletModel = null;
             rigidbody = null;

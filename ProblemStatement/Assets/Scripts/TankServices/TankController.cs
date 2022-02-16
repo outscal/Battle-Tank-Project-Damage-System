@@ -1,9 +1,9 @@
 using UnityEngine;
-using Commons;
+using System.Collections;
+using System.Collections.Generic;
 using BulletServices;
 using BulletSO;
-using VFXServices;
-using System;
+
 
 namespace TankServices
 {
@@ -19,6 +19,7 @@ namespace TankServices
             tankView = GameObject.Instantiate<TankView>(_tankView);
             CameraController.instance.SetTarget(tankView.transform);
             rigidbody = tankView.GetComponent<Rigidbody>();
+
             tankView.SetTankController(this);
             tankModel.SetTankController(this);
             tankView.ChangeColor(tankModel.material);
@@ -39,17 +40,8 @@ namespace TankServices
 
         public void ShootBullet()
         {
-            // EventService eventService = new EventService();
-            EventService.instance.OnPlayerFiredBullet += UpdateBulletCounter;
-            EventService.instance.InvokeEvent();
             BulletService.instance.CreateBullet(GetFiringPosition(), GetFiringAngle(), GetBullet());
         }
-
-        private void UpdateBulletCounter()
-        {
-            Debug.Log("BulletFiredbyPlayer");
-        }
-
         public Vector3 GetFiringPosition()
         {
             return tankView.BulletShootPoint.position;
@@ -62,14 +54,9 @@ namespace TankServices
         {
             return tankModel.bulletType;
         }
-        public Vector3 GetCurrentTankPosition()
-        {
-            return tankView.transform.position;
-        }
 
         public void DestroyController()
         {
-            VFXService.instance.InstantiateEffects(tankView.TankDestroyVFX, tankView.transform.position);
             tankModel.DestroyModel();
             tankView.DestroyView();
             tankModel = null;
@@ -77,17 +64,11 @@ namespace TankServices
             rigidbody = null;
         }
 
-        private void Dead()
+        public void OnCollisionWithBullet(BulletView bullet)
         {
             //bullets referece is passed for later use like adding damage to Tank kind of something
             TankService.instance.DestroyTank(this);
-        }
-        public void ApplyDamage(float damage)
-        {
-            if (tankModel.health - damage <= 0)
-                Dead();
-            else
-                tankModel.health -= damage;
+            BulletService.instance.DestroyBullet(bullet.bulletController);
         }
     }
 }

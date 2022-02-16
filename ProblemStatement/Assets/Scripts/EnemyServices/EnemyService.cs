@@ -3,21 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Commons;
 using EnemySO;
-using System;
-using System.Threading.Tasks;
 
 namespace EnemyServices
 {
-    public class EnemyService : GenericMonoSingleton<EnemyService>
+    public class EnemyService : GenericSingleton<EnemyService>
     {
         public EnemykScriptableObjectList enemyTypes;
         [HideInInspector] public EnemyScriptableObject enemy;
         private List<EnemyController> enemies = new List<EnemyController>();
         private Coroutine respawn;
 
-        private async void Start()
+        private void Start()
         {
-            await new WaitForEndOfFrame();
             CreateEnemy();
         }
 
