@@ -9,8 +9,7 @@ You can find a working Battle Tank project repository which contains the scripts
 3. The firing of bullets (Space/L.Ctrl key) -> Player Tank will be able to fire bullets with the help of keyboard input
 4. Using Navmesh system to create enemy AI -> Enemy Tank have 3 state behaviors such as patrolling, chasing and shooting in the game  
 5. Destroying the bullets -> Bullets will get destroyed after colliding with the enemy tank or any other gameObject
-6. Destroying enemy tanks -> Enemy tanks gets destroyed after their health is 0
-7. Basic UI -> UI containing health and other features of Player Tank is implemented 
+6. Destroying enemy tanks -> Enemy tanks gets destroyed after colliding with the bullet fired by player tank
 
 
 **Things to keep in mind after forking the repository**
