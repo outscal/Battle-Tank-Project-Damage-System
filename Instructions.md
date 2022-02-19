@@ -14,8 +14,8 @@ You can find a working Battle Tank project repository which contains the scripts
 
 **Things to keep in mind after forking the repository**
 
-1. Install Cinemachine package in Unity
+1. Install Cinemachine package in Unity (Windows -> Packagae Manager -> Unity Registry -> Cinemachine)
 2. Understand the code before jumping to the solution
-3. Install Async await packagaes from Unity Asset Store
+3. Install Async await support packages from Unity Asset Store
 4. Use Navmesh surface from (GameObject > AI > NavMesh Surface)
 5. The above repository was made in Unity 2017 but will be able to work on any 2017 or later Unity LTS version 
